@@ -1,0 +1,38 @@
+ntests=10000, ncorrect=9855, accuracy=98.55%
+=== CNN GPU profile (manual timing) ===
+Layer_feedForw_conv : 1220000 calls, 109.710661 s total, 0.000089927 s / call
+Layer_feedBack_conv : 1200000 calls, 93.499855 s total, 0.000077917 s / call
+Layer_feedForw_full : 1830000 calls, 763.284965 s total, 0.000417096 s / call
+Layer_feedBack_full : 1800000 calls, 369.925659 s total, 0.000205514 s / call
+========================================
+
+==452735== NVPROF is profiling process 452735, command: ./mnist_gpu train-images-idx3-ubyte train-labels-idx1-ubyte t10k-images-idx3-ubyte t10k-labels-idx1-ubyte
+==452735== Profiling application: ./mnist_gpu train-images-idx3-ubyte train-labels-idx1-ubyte t10k-images-idx3-ubyte t10k-labels-idx1-ubyte
+==452735== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   31.73%  249.256s   1800000  138.48us  7.1030us  427.77us  kernel_feedBack_full_updates(double const *, double const *, double const *, double*, double*, int, int)
+                   31.17%  244.847s   7310000  33.494us  1.1840us  37.340ms  [CUDA memcpy HtoD]
+                   20.30%  159.412s   1830000  87.110us  10.143us  270.91us  kernel_feedForw_full(double const *, double const *, double const *, double*, double*, int, int, bool)
+                    5.98%  46.9364s   1200000  39.113us  9.4730us  83.231us  kernel_feedBack_conv(double const *, double const *, double const *, double const *, double*, double*, double*, int, int, int, int, int, int, int, int, int)
+                    4.81%  37.7509s  10882500  3.4680us  1.3430us  33.983ms  [CUDA memcpy DtoH]
+                    3.01%  23.6242s   1800000  13.124us  2.3670us  33.951us  kernel_feedBack_full_errors(double const *, double const *, double const *, double*, int, int)
+                    1.74%  13.6648s   1220000  11.200us  2.5270us  23.743us  kernel_feedForw_conv(double const *, double const *, double const *, double*, double*, int, int, int, int, int, int, int, int, int)
+                    0.52%  4.10575s   3000000  1.3680us  1.2340us  6.3990us  [CUDA memset]
+                    0.25%  2.00216s   1220000  1.6410us  1.2470us  8.8960us  kernel_reduce_max(double const *, double*, int)
+                    0.24%  1.91213s   1220000  1.5670us  1.2470us  4.0960us  kernel_reduce_sum(double const *, double*, int)
+                    0.11%  857.79ms    610000  1.4060us  1.3750us  4.8960us  kernel_softmax(double*, double*, int, double)
+                    0.10%  778.53ms    610000  1.2760us  1.2150us  2.2400us  kernel_softmax_normalize(double*, double*, int, double)
+                    0.04%  308.98ms    187500  1.6470us  1.1830us  12.479us  kernel_update_params(double*, double*, int, double)
+      API calls:   90.52%  1.2e+03s  18192500  67.485us  2.6390us  37.517ms  cudaMemcpy
+                    7.28%  98.7435s  11697500  8.4410us  2.4920us  37.177ms  cudaLaunchKernel
+                    1.33%  18.0856s   3000000  6.0280us  2.0840us  36.890ms  cudaMemset
+                    0.44%  6.00129s   1220042  4.9180us     173ns  36.022ms  cudaFree
+                    0.43%  5.81673s   1220042  4.7670us      72ns  95.968ms  cudaMalloc
+                    0.00%  379.25us       114  3.3260us      67ns  176.47us  cuDeviceGetAttribute
+                    0.00%  10.292us         1  10.292us  10.292us  10.292us  cuDeviceGetName
+                    0.00%  6.3440us         1  6.3440us  6.3440us  6.3440us  cuDeviceGetPCIBusId
+                    0.00%  1.1750us         3     391ns     106ns     948ns  cuDeviceGetCount
+                    0.00%     391ns         2     195ns     145ns     246ns  cuDeviceGet
+                    0.00%     279ns         1     279ns     279ns     279ns  cuDeviceTotalMem
+                    0.00%     170ns         1     170ns     170ns     170ns  cuModuleGetLoadingMode
+                    0.00%     153ns         1     153ns     153ns     153ns  cuDeviceGetUuid
